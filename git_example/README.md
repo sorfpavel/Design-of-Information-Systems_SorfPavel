@@ -43,3 +43,8 @@ Change folder
 ### Run in background
 
 > nohup commands_and_arguments &
+
+### Catch output into file
+
+>  commands_and_arguments > log_file_name 2>&1
+
