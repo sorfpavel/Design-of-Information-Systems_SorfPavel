@@ -1,3 +1,4 @@
+"""NLTK"""
 import nltk #import knihovny Natural Language Toolkit. Je potřeba ji i nainstalovat: http://www.nltk.org/install.html
 sentence = "At eight o'clock on Thursday morning! Arthur didn't feel very good."  # Věta, která bude rozebrána
 
