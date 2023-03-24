@@ -11,6 +11,8 @@ Tags:
 - VB    verb (ask)
 - JJ    This NLTK POS Tag is an adjective (large)
 """
+import json
+from collections import Counter
 import nltk
 
 ### Input
@@ -25,7 +27,6 @@ groups = {
 ### Process
 tokens = nltk.word_tokenize(input_data)
 tags = nltk.pos_tag(tokens)
-entities = nltk.chunk.ne_chunk(tags) # TODO what is that?
 
 lemmatizer = nltk.stem.WordNetLemmatizer()
 roots = list(set([lemmatizer.lemmatize(token) for token in tokens]))
@@ -35,7 +36,11 @@ stems = list(set([stemmer.stem(token) for token in tokens]))
 
 grouped_tokens = {}
 for group in groups:
-    grouped_tokens[group] = [token for token, tag in tags if tag in groups[group]]
+    grouped_tokens[group] = list(set([token for token, tag in tags if tag in groups[group]]))
+
+counts = dict(Counter(tokens))
+ordered_tokens = sorted(counts.keys(), key=lambda k: counts[k], reverse=True)
+
 
 ### Report
 print("Tokens (count: {}):".format(len(tokens)))
@@ -58,3 +63,25 @@ print("Tokens by custom groups:")
 for group, tokens in grouped_tokens.items():
     print("-", group)
     print("", tokens)
+print("")
+
+print("Token counts (occurence):")
+print(counts)
+print("")
+
+print("Ordered tokens (by occurence):")
+print(ordered_tokens)
+print("")
+
+output = {
+    "input_data": input_data,
+    "tokens": tokens,
+    "tags": tags,
+    "roots": roots,
+    "stems": stems,
+    "grouped_tokens": grouped_tokens,
+    "unique_tokens_count": counts,
+    "ordered_tokens": ordered_tokens,
+}
+
+json.dump(output, open("output.json", "w"), indent=4, sort_keys=True)
