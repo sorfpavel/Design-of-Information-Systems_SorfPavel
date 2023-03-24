@@ -1,6 +1,7 @@
 import nltk
 
 ### Input
+<<<<<<< HEAD
 #grammar = "NP: {<DT>?<JJ>*<NN>}"; "VP: {<RB>*<VBZ>}"; # TODO think up better example
 ###  Shallow Parsing
 ###  https://www.commonlounge.com/chunking-shallow-parsing-understanding-text-syntax-and-structures-part-2-97d603f60c044bcd8fc98991e515e29d/
@@ -14,6 +15,10 @@ grammar = '''
 
 # input_data = "The operator launch the application gracefully."
 input_data = "The concept also aims to reduce the need for human labor, save inputs and increase production efficiency."
+=======
+grammar = "NP: {<DT>?<JJ>*<NN>}" # TODO think up better example
+input_data = "The operator launch the application gracefully."
+>>>>>>> ca5a67b59bbaa9213fbdbeeb074b4368d1d3e9f8
 
 ### Processing
 
