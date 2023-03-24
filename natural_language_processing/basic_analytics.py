@@ -11,11 +11,9 @@ Tags:
 - VB    verb (ask)
 - JJ    This NLTK POS Tag is an adjective (large)
 """
-<<<<<<< HEAD
-=======
+
 import json
 from collections import Counter
->>>>>>> ca5a67b59bbaa9213fbdbeeb074b4368d1d3e9f8
 import nltk
 
 ### Input
@@ -30,10 +28,6 @@ groups = {
 ### Process
 tokens = nltk.word_tokenize(input_data)
 tags = nltk.pos_tag(tokens)
-<<<<<<< HEAD
-entities = nltk.chunk.ne_chunk(tags) # TODO what is that?
-=======
->>>>>>> ca5a67b59bbaa9213fbdbeeb074b4368d1d3e9f8
 
 lemmatizer = nltk.stem.WordNetLemmatizer()
 roots = list(set([lemmatizer.lemmatize(token) for token in tokens]))
@@ -43,15 +37,10 @@ stems = list(set([stemmer.stem(token) for token in tokens]))
 
 grouped_tokens = {}
 for group in groups:
-<<<<<<< HEAD
-    grouped_tokens[group] = [token for token, tag in tags if tag in groups[group]]
-=======
     grouped_tokens[group] = list(set([token for token, tag in tags if tag in groups[group]]))
 
 counts = dict(Counter(tokens))
 ordered_tokens = sorted(counts.keys(), key=lambda k: counts[k], reverse=True)
-
->>>>>>> ca5a67b59bbaa9213fbdbeeb074b4368d1d3e9f8
 
 ### Report
 print("Tokens (count: {}):".format(len(tokens)))
@@ -74,8 +63,6 @@ print("Tokens by custom groups:")
 for group, tokens in grouped_tokens.items():
     print("-", group)
     print("", tokens)
-<<<<<<< HEAD
-=======
 print("")
 
 print("Token counts (occurence):")
@@ -98,4 +85,3 @@ output = {
 }
 
 json.dump(output, open("output.json", "w"), indent=4, sort_keys=True)
->>>>>>> ca5a67b59bbaa9213fbdbeeb074b4368d1d3e9f8
