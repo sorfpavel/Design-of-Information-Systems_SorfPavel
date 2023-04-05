@@ -13,15 +13,18 @@ tokens = nltk.word_tokenize(input_data)
 tags = nltk.pos_tag(tokens)
 
 lemmatizer = nltk.stem.WordNetLemmatizer()
-roots = list(set([lemmatizer.lemmatize(token) for token in tokens]))
+roots = [lemmatizer.lemmatize(token) for token in tokens]
 
 stemmer = nltk.stem.PorterStemmer()
-stems = list(set([stemmer.stem(token) for token in tokens]))
+stems = [stemmer.stem(token) for token in tokens]
 
-counts = dict(Counter(tokens))
+tagged_stems = [(token, stemmer.stem(token), tag) for token, tag in tags]
 
-tag_doubles = [tags[idx:idx + 2] for idx in range(len(tags)-1)]
-tag_triples = [tags[idx:idx + 3] for idx in range(len(tags)-2)]
+
+counts = dict(Counter(stems))
+
+tag_doubles = [tagged_stems[idx:idx + 2] for idx in range(len(tagged_stems)-1)]
+tag_triples = [tagged_stems[idx:idx + 3] for idx in range(len(tagged_stems)-2)]
 
 
 
@@ -31,13 +34,13 @@ CLASS_REQUIRED_COUNT = 2
 CLASS_IMPLEMENTATION_IGNORE = ("application", "system", "data", "computing", "platform")
 
 # C-0
-class_adepts = list(set([token for token, tag in tags if tag in CLASS_TAGS]))
+class_adepts = list(set([item for item in tagged_stems if item[2] in CLASS_TAGS]))
 
 # C-1
-class_adepts = [token for token in class_adepts if counts[token] > CLASS_REQUIRED_COUNT]
+class_adepts = [item for item in class_adepts if counts[item[1]] > CLASS_REQUIRED_COUNT]
 
 # C-2
-class_adepts = [token for token in class_adepts if not token in CLASS_IMPLEMENTATION_IGNORE]
+class_adepts = [item for item in class_adepts if not item[0] in CLASS_IMPLEMENTATION_IGNORE]
 
 # C-3 - is already done because we ignore NNP and NNPS
 
@@ -49,13 +52,14 @@ ATTRIBUTE_TAGS = ("JJ", "CD")
 
 attribute_adepts = []
 
-for triple in tag_triples:
-    pattern = [tag[0:2] for token, tag in triple]
+for double in tag_doubles:
+    pattern = [tag[0:2] for token, stem, tag in double]
     if pattern == ["NN", "NN"]:
-        attribute_adepts.append(triple[1][0])
+        attribute_adepts.append(double[1])
+
 
 # A-0
-attribute_adepts += [token for token, tag in tags if tag in ATTRIBUTE_TAGS]
+attribute_adepts += [item for item in tagged_stems if item[2] in ATTRIBUTE_TAGS]
 attribute_adepts = list(set(attribute_adepts))
 
 print(attribute_adepts)
@@ -66,8 +70,8 @@ print(attribute_adepts)
 associations_adepts = []
 
 for triple in tag_triples:
-    pattern = [tag[0:2] for token, tag in triple]
+    pattern = [tag[0:2] for token, stem, tag in triple]
     if pattern == ["NN", "VB", "NN"]:
-        associations_adepts.append([token for token, tag in triple])
+        associations_adepts.append(triple)
 
 print(associations_adepts)
